@@ -54,10 +54,18 @@ const User = bookshelf.Model.extend({
   tableName: 'users',
   hasTimestamps: true,
   hasTimestamps: ['createdAt', 'updatedAt'],
-  /*roles: function(){
-    console.log(this);
-   return this.belongsToMany(Role).withPivot(['user_roles']);
- }*/
+  optins() {
+    return this.hasMany('UserOptin')
+  }
+});
+
+const UserOptin = bookshelf.Model.extend({
+  tableName: 'user_optins',
+  hasTimestamps: true,
+  hasTimestamps: ['createdAt', 'updatedAt'],
+  user() {
+    return this.belongsTo('User')
+  }
 });
 
 const ActionLog  = bookshelf.Model.extend({
@@ -72,5 +80,6 @@ exports.LoginToken = LoginToken;
 exports.UniqueCode = UniqueCode;
 exports.Role = Role;
 exports.UserRole = UserRole;
+exports.UserOptin = UserOptin;
 exports.PasswordResetToken = PasswordResetToken;
 exports.ActionLog = ActionLog;

@@ -14,7 +14,7 @@ const ActionLog         = require('../../models').ActionLog;
 const tokenUrl          = require('../../services/tokenUrl');
 const emailService      = require('../../services/email');
 const authUrlConfig     = require('../../config/auth').get('Url');
-
+const userService       = require('../../services/user');
 
 const logSuccessFullLogin = (req) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -112,58 +112,47 @@ const sendEmail = (tokenUrl, user, client) => {
 }
 
 
-exports.postLogin = (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
   const clientConfig = req.client.config ? req.client.config : {};
   const redirectUrl =  clientConfig && clientConfig.emailRedirectUrl ? clientConfig.emailRedirectUrl : req.query.redirect_uri;
   req.redirectUrl = redirectUrl;
 
-
   /**
    * Check if user exists
    */
-  new User({ email: req.body.email })
-    .fetch()
-    .then((user) => {
-       if (user) {
-         req.user = user.serialize();
-         handleSending(req, res, next);
-       } else {
-         /**
-          * If active user is already set, the user is already logged in
-          * If email is not set it means they as anonymous user
-          * Add the submitted email to anonymous user
-          * If already a user with that email, ignore the anonymous user and login via existing user
-          */
-         if (req.user && !req.user.email && !user) {
-           req.user
-            .set('email', req.body.email)
-            .save()
-            .then((user) => {
-              req.user = user.serialize();
-              handleSending(req, res, next);
-            })
-            .catch((err) => { next(err); })
+  try {
+    let user = await userService.get(req.body.email);
 
-         } else {
-           new User({ email: req.body.email })
-             .save()
-             .then((user) => {
-               req.user = user.serialize();
-               handleSending(req, res, next);
-             })
-             .catch((err) => { next(err) });
-         }
-       }
-    })
-    .catch((err) => {
-      console.log('===> err', err);
-      req.flash('error', {msg: 'Het is niet gelukt om de e-mail te versturen!'});
-      res.redirect(req.header('Referer') || authUrlConfig.loginUrl);
-    });
+    if (user) {
+      await userService.addOptins(user.id, [req.body.optin_email]);
+      req.user = user.serialize();
+      return handleSending(req, res, next);
+    }
 
     /**
-     * Format the URL and the Send it to the user
+     * If active user is already set, the user is already logged in
+     * If email is not set it means they as anonymous user
+     * Add the submitted email to anonymous user
+     * If already a user with that email, ignore the anonymous user and login via existing user
      */
+    if (req.user && !req.user.email && !user) {
+      let user = await userService.update(req.user, req.body.email, [req.body.optin_email]);
+      await userService.addOptins(user.id, [req.body.optin_email]);
+      req.user = user.serialize();
+      return handleSending(req, res, next);
+    }
+
+    user = await userService.create(req.body.email, [req.body.optin_email]);
+    await userService.addOptins(user.id, [req.body.optin_email]);
+
+    req.user = user.serialize();
+    handleSending(req, res, next);
+
+  } catch (error) {
+    console.log('===> err', error);
+    req.flash('error', {msg: 'Het is niet gelukt om de e-mail te versturen!'});
+    res.redirect(req.header('Referer') || authUrlConfig.loginUrl);
+  }
 }
 
 
