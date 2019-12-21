@@ -32,7 +32,8 @@ exports.info = (req, res) => {
     firstName: req.user.firstName,
     postcode: req.user.postcode,
     lastName: req.user.lastName,
-    scope: req.authInfo.scope
+    scope: req.authInfo.scope,
+    optins: req.user.optins,
   });
 }
 

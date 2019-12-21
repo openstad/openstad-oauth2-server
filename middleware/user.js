@@ -2,6 +2,7 @@ const { check }             = require('express-validator/check')
 //const Promise               = require('bluebird');
 const User                  = require('../models').User;
 const UserRole              = require('../models').UserRole;
+const UserOptin              = require('../models').UserOptin;
 const Role                  = require('../models').Role;
 const userProfileValidation = require('../config/user').validation.profile;
 const bcrypt                = require('bcrypt');
@@ -106,6 +107,18 @@ exports.withRoleForClient = (req, res, next) => {
      .catch((err) => {
        next(err);
      });
+}
+
+exports.withOptins = (req, res, next) => {
+  new UserOptin({ userId: req.user.id })
+    .fetchAll()
+    .then((optins) => {
+      req.user.optins = optins.pluck('optin');
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
 }
 
 exports.withOneByEmail = (req, res, next) => {

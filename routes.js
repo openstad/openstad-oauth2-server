@@ -183,7 +183,7 @@ module.exports = function(app){
   app.post('/oauth/token',                oauth2Controller.token);
   app.get('/oauth/token',                 oauth2Controller.token);
 
-  app.get('/api/userinfo', passport.authenticate('bearer', { session: false }), clientMw.withOne, clientMw.checkUniqueCodeAuth(),   userMw.withRoleForClient, userController.info);
+  app.get('/api/userinfo', passport.authenticate('bearer', { session: false }), clientMw.withOne, clientMw.checkUniqueCodeAuth(), userMw.withRoleForClient, userMw.withOptins, userController.info);
   //app.get('/api/clientinfo', client.info);
 
   // Mimicking google's token info endpoint from
