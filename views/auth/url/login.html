@@ -38,13 +38,14 @@
 							required
 						/>
 					</div>
-
+					{% if showUserOptIn == 'true' %}
 					<div class="form-group optin">
 						<label>
 							<input type="checkbox" id="optin-email" name="optin_email" value="email" />
 							Ik wil updates ontvangen over {{ client.name }}
 						</label>
 					</div>
+					{% endif %}
 
 					<input type="hidden" name="_csrf" value="{{csrfToken}}">
 					<input type="hidden" name="clientId" value="{{clientId}}">

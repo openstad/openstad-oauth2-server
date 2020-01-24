@@ -15,6 +15,7 @@ const tokenUrl          = require('../../services/tokenUrl');
 const emailService      = require('../../services/email');
 const authUrlConfig     = require('../../config/auth').get('Url');
 const userService       = require('../../services/user');
+const settings          = require('../../config/settings');
 
 const logSuccessFullLogin = (req) => {
   const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -44,6 +45,7 @@ exports.login  = (req, res) => {
     label: configAuthType && configAuthType.label ?  configAuthType.label : false,
     helpText: configAuthType && configAuthType.helpText ? configAuthType.helpText : false,
     buttonText: configAuthType && configAuthType.buttonText ? configAuthType.buttonText : false,
+    showUserOptIn: settings.showUserOptIn()
   });
 };
 
