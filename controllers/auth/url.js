@@ -39,7 +39,7 @@ exports.login  = (req, res) => {
   res.render('auth/url/login', {
     clientId: req.query.clientId,
     client: req.client,
-    redirectUrl: req.query.redirect_uri,
+    redirectUrl: encodeURIComponent(req.query.redirect_uri),
     title: configAuthType && configAuthType.title ? configAuthType.title : false,
     description: configAuthType && configAuthType.description ?  configAuthType.description : false,
     label: configAuthType && configAuthType.label ?  configAuthType.label : false,
@@ -53,7 +53,7 @@ exports.authenticate  = (req, res) => {
   res.render('auth/url/authenticate', {
     clientId: req.query.clientId,
     client: req.client,
-    redirectUrl: req.query.redirect_uri
+    redirectUrl: encodeURIComponent(req.query.redirect_uri)
   });
 };
 
@@ -124,7 +124,7 @@ const sendEmail = (tokenUrl, user, client) => {
 
 exports.postLogin = async (req, res, next) => {
   const clientConfig = req.client.config ? req.client.config : {};
-  const redirectUrl =  clientConfig && clientConfig.emailRedirectUrl ? clientConfig.emailRedirectUrl : req.query.redirect_uri;
+  const redirectUrl =  clientConfig && clientConfig.emailRedirectUrl ? clientConfig.emailRedirectUrl : encodeURIComponent(req.query.redirect_uri);
   req.redirectUrl = redirectUrl;
 
   /**
@@ -194,7 +194,7 @@ exports.postRegister = (req, res, next) => {
 exports.postAuthenticate =  (req, res, next) => {
  passport.authenticate('url', { session: true }, function(err, user, info) {
    if (err) { return next(err); }
-   const redirectUrl = req.query.redirect_uri ? req.query.redirect_uri : req.client.redirectUrl;
+   const redirectUrl = req.query.redirect_uri ? encodeURIComponent(req.query.redirect_uri) : req.client.redirectUrl;
 
 
    // Redirect if it fails to the original e-mail screen
