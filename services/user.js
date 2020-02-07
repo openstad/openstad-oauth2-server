@@ -21,11 +21,16 @@ exports.update = async (user, email) => {
 };
 
 
-exports.addOptins = async (userId, optins) => {
+exports.addOptins = async (userId, optins, clientId) => {
+  if(optins.filter(Boolean).length <= 0) {
+      return;
+  }
+
   const currentOptins = await UserOptin
     .forge()
     .where('userId', '=', userId)
     .where('optin', 'in', optins)
+    .where('clientId', '=', clientId)
     .fetchAll();
 
   return optins.forEach(async (optin) => {
@@ -36,6 +41,7 @@ exports.addOptins = async (userId, optins) => {
     return new UserOptin(
       {
         userId: userId,
+        clientId: clientId,
         optin: optin
       })
       .save();

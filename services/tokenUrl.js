@@ -3,15 +3,20 @@ const LoginToken = require('../models').LoginToken;
 const appUrl = process.env.APP_URL;
 const hat = require('hat');
 
+const buildRedirectUrl = (redirectUrl, optins) => {
+  return optins.length > 0 ? `${redirectUrl}&optins=${optins.join(',')}` : redirectUrl;
+}
+
 /**
  *
  */
-const getUrl = (user, client, token, redirectUrl) => {
+const getUrl = (user, client, token, redirectUrl, optins) => {
   const slug = 'auth/url/authenticate';
-  return `${appUrl}/${slug}?token=${token}&clientId=${client.clientId}&redirect_uri=${redirectUrl}`;
+
+  return `${appUrl}/${slug}?token=${token}&clientId=${client.clientId}&redirect_uri=${buildRedirectUrl(redirectUrl, optins)}`;
 }
 
-exports.format = (client, user, redirectUrl) => {
+exports.format = (client, user, redirectUrl, optins) => {
   return new Promise((resolve, reject) =>  {
     const token = hat();
 
@@ -21,7 +26,7 @@ exports.format = (client, user, redirectUrl) => {
     })
     .save()
     .then((loginToken) => {
-      const url = getUrl(user, client, token, redirectUrl);
+      const url = getUrl(user, client, token, redirectUrl, optins);
       resolve(url);
     })
     .catch((err) => {

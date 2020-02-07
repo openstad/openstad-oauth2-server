@@ -66,10 +66,18 @@ exports.register = (req, res, next) => {
   });
 }
 
+const getOptinsFromBody = (body) => {
+  const optins = [];
+  if(body.optin_email) {
+    optins.push(body.optin_email)
+  }
 
+  return optins;
+}
 const handleSending = (req, res, next) => {
+
   tokenUrl.invalidateTokensForUser(req.user.id)
-    .then(() => { return tokenUrl.format(req.client, req.user, req.redirectUrl); })
+    .then(() => { return tokenUrl.format(req.client, req.user, req.redirectUrl, getOptinsFromBody(req.body)); })
     .then((tokenUrl) => { return sendEmail(tokenUrl, req.user, req.client); })
     .then((result) => {
       req.flash('success', {msg: 'De e-mail is verstuurd naar: ' + req.user.email});
@@ -126,7 +134,7 @@ exports.postLogin = async (req, res, next) => {
     let user = await userService.get(req.body.email);
 
     if (user) {
-      await userService.addOptins(user.id, [req.body.optin_email]);
+      await userService.addOptins(user.id, [req.body.optin_email], req.client.id);
       req.user = user.serialize();
       return handleSending(req, res, next);
     }
@@ -139,13 +147,13 @@ exports.postLogin = async (req, res, next) => {
      */
     if (req.user && !req.user.email && !user) {
       let user = await userService.update(req.user, req.body.email, [req.body.optin_email]);
-      await userService.addOptins(user.id, [req.body.optin_email]);
+      await userService.addOptins(user.id, [req.body.optin_email], req.client.id);
       req.user = user.serialize();
       return handleSending(req, res, next);
     }
 
     user = await userService.create(req.body.email, [req.body.optin_email]);
-    await userService.addOptins(user.id, [req.body.optin_email]);
+    await userService.addOptins(user.id, [req.body.optin_email], req.client.id);
 
     req.user = user.serialize();
     handleSending(req, res, next);
