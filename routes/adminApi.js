@@ -23,6 +23,7 @@ module.exports = (app) => {
   //app.use('/admin/api', [adminMiddleware.addClient]);
 
   app.get('/api/admin/users',                 userMw.withAll, adminApiUserController.all);
+  app.get('/api/admin/users/:optins',          userMw.withOptin, adminApiUserController.all);
   app.get('/api/admin/user/:userId',          clientMw.withAll, roleMw.withAll, userMw.withOne, adminApiUserController.show);
   app.post('/api/admin/user',                 userMw.create, userMw.saveRoles, adminApiUserController.create);
   app.post('/api/admin/user/:userId',         userMw.withOne, userMw.update, userMw.saveRoles, adminApiUserController.update);

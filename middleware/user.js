@@ -1,33 +1,33 @@
-const { check }             = require('express-validator/check')
+const { check } = require('express-validator/check');
 //const Promise               = require('bluebird');
-const User                  = require('../models').User;
-const UserRole              = require('../models').UserRole;
-const UserOptin              = require('../models').UserOptin;
-const Role                  = require('../models').Role;
+const User = require('../models').User;
+const UserRole = require('../models').UserRole;
+const UserOptin = require('../models').UserOptin;
+const Role = require('../models').Role;
 const userProfileValidation = require('../config/user').validation.profile;
-const bcrypt                = require('bcrypt');
-const saltRounds            = 10;
-const Promise               = require('bluebird');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const Promise = require('bluebird');
 
 
 exports.withAll = (req, res, next) => {
 
-  console.log('withAll')
+  console.log('withAll');
 
   User
     .query(function (qb) {
       const limit = req.query.limit ? parseInt(req.query.limit, 10) : 1000;
       const offset = req.query.offset ? parseInt(req.query.offset, 10) : 0;
       const search = req.query.search ? req.query.search : false;
-      
+
       if (req.query.clientId) {
-        qb.where('clientId',  req.client.id);
+        qb.where('clientId', req.client.id);
       }
 
       if (search) {
-        qb.where('email', 'like', '%' +search+ '%')
-          .orWhere('firstName', 'like', '%' +search+ '%')
-          .orWhere('lastName', 'like', '%' +search+ '%');
+        qb.where('email', 'like', '%' + search + '%')
+          .orWhere('firstName', 'like', '%' + search + '%')
+          .orWhere('lastName', 'like', '%' + search + '%');
       }
 
       qb.limit(limit);
@@ -37,36 +37,65 @@ exports.withAll = (req, res, next) => {
     })
     .fetchAll()
     .then((response) => {
-      console.log('response', response.length)
+      console.log('response', response.length);
 
-       req.usersCollection = response;
-       req.users = response.serialize();
+      req.usersCollection = response;
+      req.users = response.serialize();
 
-       return User.count("id");
+      return User.count('id');
     })
     .then((total) => {
-      console.log('totaltotal', total)
+      console.log('totaltotal', total);
 
       req.totalCodeCount = total;
       next();
     })
     .catch((err) => {
-      console.log('error', err)
+      console.log('error', err);
       next(err);
     });
-}
+};
+
+exports.withOptin = async (req, res, next) => {
+  try {
+    if(! req.params.optins || req.params.optins.split(',').length <= 0) {
+      next(new Error('No optin found'));
+    }
+    const optins = req.params.optins.split(',');
+
+    const total = await User
+      .fetchByOptins(optins)
+      .count();
+
+    const users = await User
+      .fetchByOptins(optins)
+      .fetchAll();
+
+    req.usersCollection = users;
+    req.users = users.serialize();
+    req.totalCodeCount = total;
+
+    next();
+
+  } catch (err) {
+    console.log('error', err);
+    next(err);
+  }
+};
 
 exports.withOne = (req, res, next) => {
   const userId = req.body.userId ? req.body.userId : req.params.userId;
 
-  new User({ id: userId  })
+  new User({ id: userId })
     .fetch()
     .then((user) => {
       const userModel = user;
       const userData = user.serialize();
 
-       UserRole
-        .query(function(qb){ qb.where('userId' , userData.id) ; })
+      UserRole
+        .query(function (qb) {
+          qb.where('userId', userData.id);
+        })
         .fetchAll()
         .then((userRoles) => {
           userData.roles = userRoles.serialize();
@@ -78,18 +107,18 @@ exports.withOne = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
-}
+};
 
 exports.withRoleForClient = (req, res, next) => {
 
   new UserRole({ userId: req.user.id, clientId: req.client.id })
-     .fetch()
-     .then((userRole) => {
+    .fetch()
+    .then((userRole) => {
 
-       if (userRole) {
-         const roleId = userRole.get('roleId');
+      if (userRole) {
+        const roleId = userRole.get('roleId');
 
-         new Role ({id: roleId})
+        new Role({ id: roleId })
           .fetch()
           .then((role) => {
             if (role) {
@@ -99,27 +128,15 @@ exports.withRoleForClient = (req, res, next) => {
           })
           .catch((err) => {
             next(err);
-          })
-       } else {
-         next();
-       }
-     })
-     .catch((err) => {
-       next(err);
-     });
-}
-
-exports.withOptins = (req, res, next) => {
-  new UserOptin({ userId: req.user.id })
-    .fetchAll()
-    .then((optins) => {
-      req.user.optins = optins.pluck('optin');
-      next();
+          });
+      } else {
+        next();
+      }
     })
     .catch((err) => {
       next(err);
     });
-}
+};
 
 exports.withOneByEmail = (req, res, next) => {
   const email = req.body.email ? req.body.email : req.query.email;
@@ -133,26 +150,26 @@ exports.withOneByEmail = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
-}
+};
 
 
 exports.validateUser = (req, res, next) => {
-/*  userFields.forEach ((field) => {
-    let fields = req.assert(field.key, field.message)
+  /*  userFields.forEach ((field) => {
+      let fields = req.assert(field.key, field.message)
 
-    if (field.required) {
-      fields.not().isEmpty();
-    }
+      if (field.required) {
+        fields.not().isEmpty();
+      }
 
-    if (field.maxLength) {
-      fields.isLength({ maxLength: fields.maxLength });
-    }
+      if (field.maxLength) {
+        fields.isLength({ maxLength: fields.maxLength });
+      }
 
-    if (field.email) {
-      fields.isEmail();
-    }
-  });
-*/
+      if (field.email) {
+        fields.isEmail();
+      }
+    });
+  */
 
   /**
    * Set user email to the body, in order to validate the email in user
@@ -163,24 +180,24 @@ exports.validateUser = (req, res, next) => {
 
   req.check(userProfileValidation);
 
-/*
-  req.check('email').custom((value) => {
-    return new Promise((resolve, reject) => {
-      new User({ email: value  })
-        .fetch()
-        .then((user) => {
-          if (user) {
-            //return Promise.reject('asadasdadsasd')
-            throw new Error('E-mail al in gebruik!');
-            //return reject('E-mail already in use');
-          } else {
-            return resolve();
-          }
-        });
-    })
-  });
-*/
-  req.getValidationResult()
+  /*
+    req.check('email').custom((value) => {
+      return new Promise((resolve, reject) => {
+        new User({ email: value  })
+          .fetch()
+          .then((user) => {
+            if (user) {
+              //return Promise.reject('asadasdadsasd')
+              throw new Error('E-mail al in gebruik!');
+              //return reject('E-mail already in use');
+            } else {
+              return resolve();
+            }
+          });
+      })
+    });
+  */
+  req.getValidationResult();
 
 //  const errors = req.validationResult();
   var errors = req.validationErrors();
@@ -191,9 +208,9 @@ exports.validateUser = (req, res, next) => {
   } else {
     next();
   }
-}
+};
 
-exports.create =  (req, res, next) => {
+exports.create = (req, res, next) => {
   let { firstName, lastName, email, streetName, houseNumber, suffix, postcode, city, phoneNumber, password } = req.body;
 
   password = bcrypt.hashSync(password, saltRounds);
@@ -210,16 +227,16 @@ exports.create =  (req, res, next) => {
     phoneNumber: phoneNumber,
     password: password
   })
-  .save()
-  .then((response) => {
-    req.userObject = response.serialize();
-    req.userObjectModel = response;
-    next();
-  })
-  .catch((err) => {
-    next(err);
-  });
-}
+    .save()
+    .then((response) => {
+      req.userObject = response.serialize();
+      req.userObjectModel = response;
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 exports.update = (req, res, next) => {
   const keysToUpdate = ['firstName', 'lastName', 'email', 'streetName', 'houseNumber', 'suffix', 'postcode', 'city', 'phoneNumber', 'password', 'requiredFields', 'exposedFields', 'authTypes'];
@@ -246,7 +263,7 @@ exports.update = (req, res, next) => {
       console.log('==> update err', err);
       next(err);
     });
-}
+};
 
 exports.saveRoles = (req, res, next) => {
   const roles = req.body.roles;
@@ -257,26 +274,31 @@ exports.saveRoles = (req, res, next) => {
     const userId = req.userObject.id;
     const saveRoles = [];
 
-    Object.keys(roles).forEach((clientId) => {
-      let roleId = roles[clientId];
-      let parsedClientId = parseInt(clientId.replace('\'', ''), 10);
-      saveRoles.push(() => { return createOrUpdateUserRole(parsedClientId, userId, roleId)});
-    });
+    Object.keys(roles)
+      .forEach((clientId) => {
+        let roleId = roles[clientId];
+        let parsedClientId = parseInt(clientId.replace('\'', ''), 10);
+        saveRoles.push(() => {
+          return createOrUpdateUserRole(parsedClientId, userId, roleId);
+        });
+      });
 
 
     Promise
       .map(saveRoles, saveRole => saveRole())
-      .then(() => { next(); })
+      .then(() => {
+        next();
+      })
       .catch((err) => {
-         console.log('==> update err', err);
-         next(err);
-       });
+        console.log('==> update err', err);
+        next(err);
+      });
   }
-}
+};
 
 const createOrUpdateUserRole = (clientId, userId, roleId) => {
-  return new Promise ((resolve, reject) => {
-    new UserRole({clientId, userId})
+  return new Promise((resolve, reject) => {
+    new UserRole({ clientId, userId })
       .fetch()
       .then((userRole) => {
         if (userRole) {
@@ -286,17 +308,17 @@ const createOrUpdateUserRole = (clientId, userId, roleId) => {
           return new UserRole({ clientId, roleId, userId }).save();
         }
       })
-      .then(()=> {
-        resolve()
+      .then(() => {
+        resolve();
       })
       .catch((err) => {
-        reject(err)
+        reject(err);
       });
   });
-}
+};
 
-exports.validateUniqueEmail  = (req, res, next) => {
-  new User({ email: req.body.email  })
+exports.validateUniqueEmail = (req, res, next) => {
+  new User({ email: req.body.email })
     .fetch()
     .then(user => {
       if (user) {
@@ -308,7 +330,7 @@ exports.validateUniqueEmail  = (req, res, next) => {
         next();
       }
     });
-}
+};
 
 exports.validatePassword = (req, res, next) => {
   if (
@@ -318,10 +340,10 @@ exports.validatePassword = (req, res, next) => {
   ) {
     next();
   } else {
-    req.flash('error', {msg: 'Incorrect wachtwoord'});
+    req.flash('error', { msg: 'Incorrect wachtwoord' });
     res.redirect(req.header('Referer') || '/account');
   }
-}
+};
 
 exports.validateEmail = (req, res, next) => {
   if (
@@ -330,10 +352,10 @@ exports.validateEmail = (req, res, next) => {
   ) {
     next();
   } else {
-    req.flash('error', {msg: 'Incorrect email'});
+    req.flash('error', { msg: 'Incorrect email' });
     res.redirect(req.header('Referer') || '/account');
   }
-}
+};
 
 exports.deleteOne = (req, res, next) => {
   req.userObjectModel
@@ -341,5 +363,7 @@ exports.deleteOne = (req, res, next) => {
     .then(() => {
       next();
     })
-    .catch((err) => { next(err); });
-}
+    .catch((err) => {
+      next(err);
+    });
+};

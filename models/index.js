@@ -52,12 +52,18 @@ const PasswordResetToken  = bookshelf.Model.extend({
 
 const User = bookshelf.Model.extend({
   tableName: 'users',
-  hasTimestamps: true,
   hasTimestamps: ['createdAt', 'updatedAt'],
   optins() {
-    return this.hasMany('UserOptin')
+    return this.hasMany('UserOptin');
   }
 });
+
+User.fetchByOptins = (optins) => {
+  return User.forge().query((query) => {
+    query.join('user_optins', 'user_optins.userId', 'users.id');
+    query.whereIn('user_optins.optin', optins);
+  });
+}
 
 const UserOptin = bookshelf.Model.extend({
   tableName: 'user_optins',
