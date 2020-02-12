@@ -66,18 +66,10 @@ exports.register = (req, res, next) => {
   });
 }
 
-const getOptinsFromBody = (body) => {
-  const optins = [];
-  if(body.optin_email) {
-    optins.push(body.optin_email)
-  }
-
-  return optins;
-}
 const handleSending = (req, res, next) => {
 
   tokenUrl.invalidateTokensForUser(req.user.id)
-    .then(() => { return tokenUrl.format(req.client, req.user, req.redirectUrl, getOptinsFromBody(req.body)); })
+    .then(() => { return tokenUrl.format(req.client, req.user, req.redirectUrl); })
     .then((tokenUrl) => { return sendEmail(tokenUrl, req.user, req.client); })
     .then((result) => {
       req.flash('success', {msg: 'De e-mail is verstuurd naar: ' + req.user.email});
