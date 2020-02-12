@@ -28,7 +28,7 @@ const MemoryStore = expressSession.MemoryStore;
 
 // Express configuration
 const app = express();
-const nunjucksEnv = nunjucks.configure('views', { autoescape: true, express: app });
+const nunjucksEnv = nunjucks.configure(path.join(__dirname, 'views'), { autoescape: true, express: app });
 app.set('view engine', 'html');
 app.set('port', process.env.PORT || 4000);
 app.use(express.static(path.join(__dirname, 'public')));
