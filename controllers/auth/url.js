@@ -45,7 +45,8 @@ exports.login  = (req, res) => {
     label: configAuthType && configAuthType.label ?  configAuthType.label : false,
     helpText: configAuthType && configAuthType.helpText ? configAuthType.helpText : false,
     buttonText: configAuthType && configAuthType.buttonText ? configAuthType.buttonText : false,
-    showUserOptIn: settings.showUserOptIn(config)
+    showUserOptIn: settings.showUserOptIn(config),
+    userOptInText: settings.getUserOptInText(config)
   });
 };
 
