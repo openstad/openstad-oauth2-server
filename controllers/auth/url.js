@@ -46,7 +46,7 @@ exports.login  = (req, res) => {
     helpText: configAuthType && configAuthType.helpText ? configAuthType.helpText : false,
     buttonText: configAuthType && configAuthType.buttonText ? configAuthType.buttonText : false,
     showUserOptIn: settings.showUserOptIn(config),
-    userOptInText: settings.getUserOptInText(config)
+    userOptInText: settings.getUserOptInText(config, req.client.name)
   });
 };
 

@@ -5,6 +5,6 @@ exports.showUserOptIn = (config) => {
 }
 
 
-exports.getUserOptInText = (config) => {
-  return config.userOptInText || '';
+exports.getUserOptInText = (config, clientName) => {
+  return config.userOptInText || `Ik wil updates ontvangen over ${clientName}`;
 }

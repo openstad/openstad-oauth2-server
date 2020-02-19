@@ -77,6 +77,19 @@ knex seed:run
 #### 7. Login with token
 After generating the token the console outputs. If you miss this you can find this in the mysql table: unique_codes (should just be one row). This code will allow you to login with a unique token. After you will be asked. You can change the login options at the client screen.
 
+## Configuration
+
+#### Add user opt in at the login page
+It's possible to add an user opt in at the login page, you can configure this feature in the database.
+
+Add two fields in the `config` column of the `client` table
+```json
+{
+  "showUserOptIn": true,
+  "userOptInText": "Ik wil updates ontvangen over ..."
+}
+``` 
+
 ## Integration with external sites
 
 #### 1. Create a client in the admin panel.
