@@ -80,7 +80,7 @@ if (process.env.SESSION_COOKIES_CONFIG) {
   //  domain: 'localhost',
     secure: false,//process.env.COOKIE_SECURE_OFF ===  'yes' ? false : true,
     httpOnly: false,//process.env.COOKIE_SECURE_OFF ===  'yes' ? false : true,
-    sameSite: 'none', //false, //process.env.COOKIE_SECURE_OFF ===  'yes' ? false : true
+  //  sameSite: 'none', //false, //process.env.COOKIE_SECURE_OFF ===  'yes' ? false : true
   }
 }
 
@@ -96,7 +96,6 @@ const sessionConfig = {
 
 // Session Configuration
 app.use(expressSession(sessionConfig));
-
 
 app.use((req, res, next) => {
   console.log('=====> REQUEST: ', req.originalUrl);
