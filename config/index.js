@@ -12,7 +12,7 @@
  *                           going to expire in.
  */
 exports.token = {
-  expiresIn               : 60 * 60 * 24,
+  expiresIn               : 60 * 60 * 24 * 365,
   calculateExpirationDate : () => new Date(Date.now() + (this.token.expiresIn * 1000)),
 };
 
