@@ -73,7 +73,7 @@ exports.postReset = (req, res, next) => {
                     return user.save();
                 })
                 .then(() => {
-                    req.flash('success', {msg: 'Wachtwoord aangepast, je kan nu inloggen!'});
+                    req.flash('success', {msg: 'Password updated! You can login now'});
                     res.redirect(authLocalConfig.loginUrl + `?clientId=${req.client.clientId}&redirect_uri=${encodeURIComponent(req.query.redirect_uri)}`);
                 })
                 .catch((err) => {
@@ -93,7 +93,7 @@ exports.postForgot = (req, res, next) => {
         .fetch()
         .then((user) => {
             if (!user) {
-                req.flash('error', {msg: 'Het is niet gelukt om de e-mail te versturen!'});
+                req.flash('error', {msg: 'Couldn\'t send the email'});
                 res.redirect(req.header('Referer') || '/auth/local/forgot' + '?clientId=' + req.client.clientId + `&redirect_uri=${encodeURIComponent(req.query.redirect_uri)}`);
             }
 
@@ -108,12 +108,12 @@ exports.postForgot = (req, res, next) => {
             return sendEmail(url, req.user, req.client);
         })
         .then(() => {
-            req.flash('success', {msg: 'We hebben een e-mail naar je verstuurd'});
+            req.flash('success', {msg: 'We\'ve send you an email'});
             res.redirect(req.header('Referer') || authLocalConfig.loginUrl + '?clientId=' + req.client.clientId + `&redirect_uri=${encodeURIComponent(req.query.redirect_uri)}`);
         })
         .catch((err) => {
             console.log('ererer', err)
-            req.flash('error', {msg: 'E-mail adres is niet bekend bij ons.'});
+            req.flash('error', {msg: 'Your email adress is unknown.'});
             res.redirect(req.header('Referer') || authLocalConfig.loginUrl + '?clientId=' + req.client.clientId + `&redirect_uri=${encodeURIComponent(req.query.redirect_uri)}`);
         });
 
@@ -127,6 +127,7 @@ exports.postForgot = (req, res, next) => {
         const clientConfigStyling = clientConfig.styling ? clientConfig.styling : {};
 
         const transporterConfig = clientConfig.smtpTransport ? clientConfig.smtpTransport : {};
+
         let emailLogo;
 
         // load env sheets that have been set for complete Environment, not specific for just one client
@@ -152,6 +153,7 @@ exports.postForgot = (req, res, next) => {
                 clientName: client.name,
                 logo: emailLogo,
                 headerImage: false,
+                emailButtonColor: configReset.emailButtonColor, //#000000
                 emailButtonText: configReset.emailButtonText,
                 emailDescriptionText: configReset.emailDescriptionText,
                 emailValidTimeText: configReset.emailValidTimeText,
