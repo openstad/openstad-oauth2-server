@@ -10,7 +10,7 @@ const Client = bookshelf.Model.extend({
   hasTimestamps: ['createdAt', 'updatedAt'],
   jsonColumns: ['authTypes', 'requiredFields'],
   getAuthTypes: (model) => {
-    const authTypes = JSON.parse(model.get('authTypes'));
+    const authTypes = model.get('authTypes');
 
     return authTypes.map((authType) => {
       let configAuthType = configAuthTypes.find(type => type.key === authType);

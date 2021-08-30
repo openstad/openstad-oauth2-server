@@ -27,7 +27,7 @@ exports.info = (req, res) => {
 
   let extraData;
   try {
-    extraData = JSON.parse(req.user.extraData)
+    extraData = req.user.extraData
   } catch(err) {}
 
   res.json({

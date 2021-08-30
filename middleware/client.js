@@ -37,7 +37,9 @@ exports.withOne = (req, res, next) => {
         req.clientModel = client;
         req.client = client.serialize();
 
-        const clientConfig = JSON.parse(req.client.config);
+        console.log('client', client)
+
+        const clientConfig = req.client.config;
         const clientConfigStyling = clientConfig.styling ?  clientConfig.styling : {};
 
         res.locals.clientProjectUrl = clientConfig.projectUrl;
@@ -62,12 +64,12 @@ exports.withOne = (req, res, next) => {
           res.locals.displayClientName = true;
         }
 
-        req.client.authTypes            = JSON.parse(req.client.authTypes);
-        req.client.exposedUserFields    = JSON.parse(req.client.exposedUserFields);
-        req.client.requiredUserFields   = JSON.parse(req.client.requiredUserFields);
-        req.client.config               = JSON.parse(req.client.config);
-        req.client.allowedDomains       = JSON.parse(req.client.allowedDomains);
-        req.client.twoFactorRoles       = JSON.parse(req.client.twoFactorRoles);
+        req.client.authTypes            = req.client.authTypes;
+        req.client.exposedUserFields    = req.client.exposedUserFields;
+        req.client.requiredUserFields   = req.client.requiredUserFields;
+        req.client.config               = req.client.config;
+        req.client.allowedDomains       = req.client.allowedDomains;
+        req.client.twoFactorRoles       = req.client.twoFactorRoles;
 
         next();
       } else {

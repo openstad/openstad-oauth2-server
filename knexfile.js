@@ -3,8 +3,9 @@ require('dotenv').config();
 
 module.exports = {
   development: {
-    client: 'mysql',
+    client: 'mysql2',
     connection: {
+      port:     process.env.DB_PORT,
       host:     process.env.DB_HOST,
       database: process.env.DB_NAME,
       user:     process.env.DB_USER,
@@ -30,8 +31,9 @@ module.exports = {
   },
 
   production: {
-    client: 'mysql',
+    client: 'mysql2',
     connection: {
+      port:     process.env.DB_PORT,
       host:     process.env.DB_HOST,
       database: process.env.DB_NAME,
       user:     process.env.DB_USER,

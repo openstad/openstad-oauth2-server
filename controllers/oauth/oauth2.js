@@ -172,7 +172,7 @@ exports.authorization = [
       /**
        * Check if redirectURI same host as registered
        */
-      const allowedDomains = client.allowedDomains ? JSON.parse(client.allowedDomains) : false;
+      const allowedDomains = client.allowedDomains ? client.allowedDomains : false;
       const redirectUrlHost = new URL(redirectURI).hostname;
 
       //console.log('===> allowedDomains', allowedDomains, redirectUrlHost);

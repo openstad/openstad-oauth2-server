@@ -42,7 +42,7 @@ exports.withAll = (req, res, next) => {
        req.usersCollection = response;
        req.users = response.serialize();
        req.users = req.users.map((user) => {
-         user.extraData = user.extraData ? JSON.parse(user.extraData) : {}
+         user.extraData = user.extraData ? user.extraData : {}
          return user;
        })
 
@@ -74,7 +74,7 @@ exports.withOne = (req, res, next) => {
           userData.roles = userRoles.serialize();
           req.userObjectModel = userModel;
           req.userObject = userData;
-          req.userObject.extraData = req.userObject.extraData ? JSON.parse(req.userObject.extraData) : {}
+          req.userObject.extraData = req.userObject.extraData ?  req.userObject.extraData : {}
 
           next();
         });
@@ -120,7 +120,7 @@ exports.withOneByEmail = (req, res, next) => {
     .then((user) => {
       req.userObjectModel = user;
       req.userObject = user.serialize();
-      req.userObject.extraData = req.userObject.extraData ? JSON.parse(req.userObject.extraData) : {}
+      req.userObject.extraData = req.userObject.extraData ? req.userObject.extraData : {}
 
       next();
     })
