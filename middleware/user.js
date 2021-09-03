@@ -9,6 +9,10 @@ const hat                   = require('hat');
 const saltRounds            = 10;
 const Promise               = require('bluebird');
 
+function isObject(obj)
+{
+  return obj != null && obj.constructor.name === "Object"
+}
 
 exports.withAll = (req, res, next) => {
 
@@ -226,8 +230,6 @@ exports.update = (req, res, next) => {
 
   console.log('Update exxx', req.body);
 
-  let extraData = req.userObjectModel.get('extraData');
-  console.log('extraData aaa', extraData)
 
   keysToUpdate.forEach((key) => {
     console.log('run key', key)
@@ -237,8 +239,7 @@ exports.update = (req, res, next) => {
 
       if (key === 'extraData') {
         value = value ? value : {};
-        value = JSON.stringify(value);
-        extraData = value;
+        value =  isObject(value) ?  JSON.stringify(value) : value;
       }
 
       if (key === 'password') {
@@ -252,16 +253,15 @@ exports.update = (req, res, next) => {
 
   });
 
-  try {
-    console.log('extraData', extraData)
-    extraData = extraData ? JSON.stringify(extraData) : '{}';
-    console.log('extraData2', extraData)
-
-    req.userObjectModel.set('extraData', extraData);
-  } catch (e) {
-    console.warn(e)
+  if (!req.body.extraData) {
+    try {
+      let extraData = req.userObjectModel.get('extraData');
+      extraData = extraData ? JSON.stringify(extraData) : '{}';
+      req.userObjectModel.set('extraData', extraData);
+    } catch (e) {
+      console.warn(e)
+    }
   }
-  console.log('extraData', 'save')
 
   req.userObjectModel.save()
     .then((response) => {
