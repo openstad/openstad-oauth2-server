@@ -224,23 +224,44 @@ exports.create =  (req, res, next) => {
 exports.update = (req, res, next) => {
   const keysToUpdate = ['firstName', 'lastName', 'email', 'streetName', 'houseNumber', 'suffix', 'postcode', 'city', 'phoneNumber', 'hashedPhoneNumber', 'password', 'requiredFields', 'exposedFields', 'authTypes', 'extraData', 'twoFactorConfigured', 'twoFactorToken'];
 
+  console.log('Update exxx', req.body);
+
+  let extraData = req.userObjectModel.get('extraData');
+  console.log('extraData aaa', extraData)
+
   keysToUpdate.forEach((key) => {
+    console.log('run key', key)
+
     if (req.body[key] || req.body[key] === 0 || req.body[key] === null  || req.body[key] === false) {
       let value = req.body[key];
 
       if (key === 'extraData') {
         value = value ? value : {};
         value = JSON.stringify(value);
+        extraData = value;
       }
-
 
       if (key === 'password') {
         value = bcrypt.hashSync(value, saltRounds);
       }
 
+      console.log('set key', key, value)
+
       req.userObjectModel.set(key, value);
     }
+
   });
+
+  try {
+    console.log('extraData', extraData)
+    extraData = extraData ? JSON.stringify(extraData) : '{}';
+    console.log('extraData2', extraData)
+
+    req.userObjectModel.set('extraData', extraData);
+  } catch (e) {
+    console.warn(e)
+  }
+  console.log('extraData', 'save')
 
   req.userObjectModel.save()
     .then((response) => {
@@ -249,7 +270,7 @@ exports.update = (req, res, next) => {
       next();
     })
     .catch((err) => {
-      console.log('==> update err', err);
+      console.log('==> update err1111', err);
       next(err);
     });
 }

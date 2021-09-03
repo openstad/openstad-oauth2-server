@@ -98,8 +98,8 @@ app.use(expressSession(sessionConfig));
 
 app.use(flash());
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }));
+app.use(bodyParser.json({ limit: '5mb' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(expressValidator());
