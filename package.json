@@ -54,7 +54,7 @@
   },
   "scripts": {
     "lint": "eslint *.js config db test",
-    "start": "node app.js",
+    "start": "knex migrate:latest && node app.js",
     "start:ci": "serve --no-clipboard --listen ${PORT:-8080}",
     "test": "npm run test:unit && npm run test:e2e",
     "test-cert": "env TEST_CERTS=1 npm run test:unit",

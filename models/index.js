@@ -24,6 +24,11 @@ const LoginToken = bookshelf.Model.extend({
   hasTimestamps: ['createdAt', 'updatedAt']
 });
 
+const AccessToken = bookshelf.Model.extend({
+  tableName: 'access_tokens',
+  hasTimestamps: ['createdAt', 'updatedAt']
+});
+
 const UniqueCode = bookshelf.Model.extend({
   tableName: 'unique_codes',
   hasTimestamps: ['createdAt', 'updatedAt']
@@ -49,6 +54,7 @@ const userKeysToSanitize = ['firstName', 'lastName', 'email', 'phoneNumber', 'ex
 const User = bookshelf.Model.extend({
   tableName: 'users',
   hasTimestamps: ['createdAt', 'updatedAt'],
+ // jsonColumns: ['extraData'],
   roles() {
     return this.belongsToMany(Role, 'user_roles', 'userId', 'roleId');
   },
@@ -82,3 +88,4 @@ exports.UserRole = UserRole;
 exports.PasswordResetToken = PasswordResetToken;
 exports.ActionLog = ActionLog;
 exports.ExternalCsrfToken = ExternalCsrfToken;
+exports.AccessToken = AccessToken;

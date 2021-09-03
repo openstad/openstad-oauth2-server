@@ -228,9 +228,6 @@ exports.create =  (req, res, next) => {
 exports.update = (req, res, next) => {
   const keysToUpdate = ['firstName', 'lastName', 'email', 'streetName', 'houseNumber', 'suffix', 'postcode', 'city', 'phoneNumber', 'hashedPhoneNumber', 'password', 'requiredFields', 'exposedFields', 'authTypes', 'extraData', 'twoFactorConfigured', 'twoFactorToken'];
 
-  console.log('Update exxx', req.body);
-
-
   keysToUpdate.forEach((key) => {
     console.log('run key', key)
 
@@ -245,8 +242,6 @@ exports.update = (req, res, next) => {
       if (key === 'password') {
         value = bcrypt.hashSync(value, saltRounds);
       }
-
-      console.log('set key', key, value)
 
       req.userObjectModel.set(key, value);
     }

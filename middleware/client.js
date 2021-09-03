@@ -37,8 +37,6 @@ exports.withOne = (req, res, next) => {
         req.clientModel = client;
         req.client = client.serialize();
 
-        console.log('client', client)
-
         const clientConfig = req.client.config;
         const clientConfigStyling = clientConfig.styling ?  clientConfig.styling : {};
 

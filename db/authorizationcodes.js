@@ -19,6 +19,8 @@ let codes = Object.create(null);
  */
 exports.find = (token) => {
   try {
+    console.log('hererer get auth code');
+
     const id = jwt.decode(token).jti;
     return Promise.resolve(codes[id]);
   } catch (error) {

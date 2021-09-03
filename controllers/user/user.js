@@ -26,11 +26,12 @@ exports.info = (req, res) => {
   // example simply returns the scope in the response.
 
   let extraData;
+
   try {
     extraData = req.user.extraData
   } catch(err) {}
 
-  res.json({
+  const userInfo = {
     user_id: req.user.id,
     email: req.user.email,
     role: req.user.role,
@@ -42,7 +43,9 @@ exports.info = (req, res) => {
     hashedPhoneNumber: req.user.hashedPhoneNumber,
     extraData,
     scope: req.authInfo.scope
-  });
+  }
+
+  res.json(userInfo);
 }
 
 

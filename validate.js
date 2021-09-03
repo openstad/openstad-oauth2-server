@@ -191,8 +191,15 @@ validate.generateRefreshToken = ({ userId, clientID, scope }) => {
 validate.generateToken = ({ userID, clientID, scope }) => {
   const token      = utils.createToken({ sub : userID, exp : config.token.expiresIn });
   const expiration = config.token.calculateExpirationDate();
-  return db.accessTokens.save(token, expiration, userID, clientID, scope)
-  .then(() => token);
+  console.log('exchange authorization start', db.accessTokens.save);
+
+  const promiseToSave = db.accessTokens.save(token, expiration, userID, clientID, scope)
+
+  console.log('exchange authorization', promiseToSave);
+  const promiseToSaveThen = promiseToSave.then(() => token);
+  console.log('exchange authorization promiseToSaveThen', promiseToSaveThen);
+
+  return promiseToSaveThen;
 };
 
 /**
