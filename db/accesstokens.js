@@ -122,7 +122,12 @@ exports.delete = (token) => {
  * @returns {Promise} resolved with an associative of tokens that were expired
  */
 exports.removeExpired = () => {
-  console.log('Finish remove expired...')
+  const removeExpiredAction = new Promise((resolve, reject) => {
+    console.log('Finish remove expired...')
+    resolve(undefined)
+  });
+
+  return removeExpiredAction;
   /*
   return new AccessToken()
     .fetchAll()
