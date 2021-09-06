@@ -61,16 +61,31 @@ exports.postReset = (req, res, next) => {
     new User({id: userId})
         .fetch()
         .then((user) => {
+            console.log('req.body.email', req.body.email);
+            console.log('ruser.get(\'email\')', user.get('email'));
 
             if (req.body.email !== user.get('email')) {
                 req.flash('error', {msg: 'Not the correct e-mail'});
-                res.redirect(req.header('Referer'));
+                return res.redirect(req.header('Referer'));
             }
 
-            user.set('password', bcrypt.hashSync(req.body.password, saltRounds));
+            try {
+                user.set('password', bcrypt.hashSync(req.body.password, saltRounds));
+
+                // extraData sucks, make it JSON column
+                let extraData = user.get('extraData');
+                extraData = extraData ? JSON.stringify(extraData) : '{}';
+                user.set('extraData', extraData);
+            } catch (e) {
+                console.warn(e)
+            }
+
 
             return password.invalidateTokensForUser(userId)
                 .then(() => {
+
+
+
                     return user.save();
                 })
                 .then(() => {
@@ -95,7 +110,7 @@ exports.postForgot = (req, res, next) => {
         .then((user) => {
             if (!user) {
                 req.flash('error', {msg: 'Couldn\'t send the email'});
-                res.redirect(req.header('Referer') || '/auth/local/forgot' + '?clientId=' + req.client.clientId + `&redirect_uri=${encodeURIComponent(req.query.redirect_uri)}`);
+                return res.redirect(req.header('Referer') || '/auth/local/forgot' + '?clientId=' + req.client.clientId + `&redirect_uri=${encodeURIComponent(req.query.redirect_uri)}`);
             }
 
             req.user = user.serialize();
@@ -164,13 +179,6 @@ exports.postForgot = (req, res, next) => {
             },
             transporterConfig
         });
-
-
-
-
-
-
-
 
     }
 }
