@@ -63,7 +63,8 @@ exports.postReset = (req, res, next) => {
         .then((user) => {
 
             if (req.body.email !== user.get('email')) {
-                throw new Error('E-mail not the same');
+                req.flash('error', {msg: 'Not the correct e-mail'});
+                res.redirect(req.header('Referer'));
             }
 
             user.set('password', bcrypt.hashSync(req.body.password, saltRounds));
