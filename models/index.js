@@ -16,7 +16,8 @@ const Client = bookshelf.Model.extend({
       let configAuthType = configAuthTypes.find(type => type.key === authType);
       return configAuthType;
     });
-  }
+  },
+
 });
 
 const LoginToken = bookshelf.Model.extend({

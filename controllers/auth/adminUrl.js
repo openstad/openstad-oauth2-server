@@ -17,12 +17,12 @@ exports.postLogin = async (req, res, next) => {
 
       req.flash('success', { msg: 'De e-mail is verstuurd naar: ' + req.user.email });
 
-      return res.redirect('/auth/admin/confirmation?clientId=' + req.client.clientId +'&redirect_uri='+ req.redirectUrl);
+      return res.redirect('/auth/admin/url/confirmation?clientId=' + req.client.clientId +'&redirect_uri='+ req.redirectUrl);
     } catch(err) {
       console.log(err)
       req.flash('error', { msg: 'U heeft geen rechten om deze actie uit te voeren.' });
 
-      return res.redirect('/auth/admin/login?clientId=' + req.client.clientId +'&redirect_uri='+ req.redirectUrl);
+      return res.redirect('/auth/admin/url/login?clientId=' + req.client.clientId +'&redirect_uri='+ req.redirectUrl);
     }
   } catch (err) {
     console.log('===> err', err);
@@ -39,7 +39,7 @@ exports.confirmation  = (req, res) => {
   res.render('auth/url/confirmation', {
     clientId: req.query.clientId,
     client: req.client,
-    loginUrl: '/auth/admin/login',
+    loginUrl: '/auth/admin/url/login',
     redirectUrl: encodeURIComponent(req.query.redirect_uri),
     title: configAuthType && configAuthType.confirmedTitle ? configAuthType.confirmedTitle : false,
     description: configAuthType && configAuthType.confirmedDescription ?  configAuthType.confirmedDescription : false,
@@ -56,7 +56,7 @@ exports.postAuthenticate = (req, res, next) => {
     // Redirect if it fails to the original e-mail screen
     if (!user) {
       req.flash('error', { msg: 'De url is geen geldige login url, wellicht is deze verlopen' });
-      return res.redirect(`/auth/admin/login?clientId=${req.client.clientId}&redirect_uri=${redirectUrl}`);
+      return res.redirect(`/auth/admin/url/login?clientId=${req.client.clientId}&redirect_uri=${redirectUrl}`);
     }
 
     req.logIn(user, function (err) {
