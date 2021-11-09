@@ -20,7 +20,7 @@ const handleStoreError = function (error) {
 
 //CONFIGURE BRUTE FORCE PROTECT
 exports.user = new ExpressBrute(new ExpressBrute.MemoryStore(), {
-	freeRetries: 50,
+	freeRetries: 500,
 	minWait: 5*60*1000, // 5 minutes
 	maxWait: 60*30*1000, // 0.5 hour,
 	failCallback: failCallback,
@@ -29,7 +29,7 @@ exports.user = new ExpressBrute(new ExpressBrute.MemoryStore(), {
 
 //CONFIGURE BRUTE FORCE PROTECT
 exports.userVeryRestricted = new ExpressBrute(new ExpressBrute.MemoryStore(), {
-	freeRetries: 5,
+	freeRetries: 50,
 	minWait: 5*60*1000, // 5 minutes
 	maxWait: 60*30*1000, // 0.5 hour,
 	failCallback: failCallback,
@@ -38,7 +38,7 @@ exports.userVeryRestricted = new ExpressBrute(new ExpressBrute.MemoryStore(), {
 
 //CONFIGURE BRUTE FORCE PROTECT
 exports.global = new ExpressBrute(new ExpressBrute.MemoryStore(), {
-	freeRetries: 1000,
+	freeRetries: 10000000000,
 	attachResetToRequest: false,
 	refreshTimeoutOnRequest: false,
 	minWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)
