@@ -59,7 +59,7 @@ const sessionStore =  new MongoStore({
 const app = express();
 
 Sentry.init({
-    dsn: process.env.DEV_DEBUG ?  false : "https://c125819380134751ae31768030ba29cf@o1060999.ingest.sentry.io/6051095",
+    dsn: process.env.DEV_DEBUG ?  false : process.env.SENTRY_URL,
     integrations: [
         // enable HTTP calls tracing
         new Sentry.Integrations.Http({ tracing: true }),
