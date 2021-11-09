@@ -1,4 +1,5 @@
 const passport                 = require('passport');
+const Sentry = require("@sentry/node");
 
 const adminApiUserController          = require('../controllers/admin/api/user');
 const adminApiClientController        = require('../controllers/admin/api/client');
@@ -58,6 +59,8 @@ module.exports = (app) => {
   app.post('/api/admin/unique-code',                  clientMw.withOne,   codeMw.create,    adminApiUniqueCodeController.created);
   app.post('/api/admin/unique-code/:codeId/delete',   codeMw.deleteOne,   adminApiUniqueCodeController.delete);
   app.post('/api/admin/unique-code/:codeId/reset',    codeMw.withOne,     codeMw.reset, adminApiUniqueCodeController.reset);
+
+  app.use(Sentry.Handlers.errorHandler());
 
   // only use this error handler middleware in "/api" based routes in order to output the errors as JSON instead of HTML
   app.use("/api/admin/", function(err, req, res, next){

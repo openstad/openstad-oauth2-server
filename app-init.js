@@ -21,6 +21,9 @@ const replaceIdeaVariablesFilter  = require('./nunjucks/replaceIdeaVariables');
 const flash                       = require('express-flash');
 const expressValidator            = require('express-validator');
 const MongoStore                 = require('connect-mongo')(expressSession);
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
+
 
 //const MemoryStore = expressSession.MemoryStore;
 
@@ -54,6 +57,30 @@ const sessionStore =  new MongoStore({
 
 // Express configuration
 const app = express();
+
+Sentry.init({
+    dsn: process.env.DEV_DEBUG ?  false : "https://c125819380134751ae31768030ba29cf@o1060999.ingest.sentry.io/6051095",
+    integrations: [
+        // enable HTTP calls tracing
+        new Sentry.Integrations.Http({ tracing: true }),
+        // enable Express.js middleware tracing
+        new Tracing.Integrations.Express({ app: app }),
+    ],
+
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+});
+
+// The request handler must be the first middleware on the app
+// RequestHandler creates a separate execution context using domains, so that every
+// transaction/span/breadcrumb is attached to its own Hub instance
+app.use(Sentry.Handlers.requestHandler());
+// TracingHandler creates a trace for every incoming request
+app.use(Sentry.Handlers.tracingHandler());
+
+
 const nunjucksEnv = nunjucks.configure('views', { autoescape: true, express: app });
 app.set('view engine', 'html');
 app.set('port', process.env.PORT || 4000);
