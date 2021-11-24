@@ -6,11 +6,10 @@
   <p class="intro">
     {{description}}
   </p>
-  <form action="?&clientId={{clientId}}&redirect_uri={{redirectUrl}}" method="POST" class="validate-form">
+  <form action="?&clientId={{clientId}}&redirect_uri={{redirectUrl}}" method="POST" class="validate-form login-page">
     <input type="hidden" name="_csrf" value="{{csrfToken}}" />
     <input type="hidden" name="clientId" value="{{clientId}}" />
 
-    <fieldset>
       <!-- Upper box with Title, username, and password -->
       <div class="card">
 
@@ -22,7 +21,7 @@
             <!-- Username label and input -->
             <div class="input-fields">
               {% include 'elements/error-flash.html' %}
-              <label>
+              <label >
                 {{emailLabel if emailLabel else 'E-mail:'}}
               </label>
               <input
@@ -30,6 +29,7 @@
                 type="text"
                 name="email"
                 class="form-input"
+                placeholder="{{emailLabel if emailLabel else 'E-mail'}}"
                 required
               />
             </div>
@@ -45,6 +45,7 @@
                 id="password"
                 type="password"
                 name="password"
+                placeholder="{{passwordLabel if passwordLabel else 'Password'}}"
                 required
                 autocomplete="off"
                 minlength="8"
@@ -69,7 +70,6 @@
         </div>
         </div>
       </div>
-    </fieldset>
   </form>
 
 <!--

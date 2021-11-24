@@ -6752,26 +6752,102 @@ a:hover {
 .backlink:hover {
   color: #666666 !important;
 }
+body,
+html {
+  height: 100%;
+}
+.centered-page h1 {
+  font-size: 23px;
+  text-align: center;
+  line-height: 1;
+}
+.centered-page .flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f3f3;
+  height: 100%;
+}
+.centered-page .row-flex {
+  margin: auto;
+  width: auto;
+  max-width: 320px;
+  width: 100%;
+  border-radius: 2px;
+  padding: 20px;
+}
+.centered-page .row-flex .btn-primary[type="submit"] {
+  width: 100%;
+  font-size: 14px;
+  font-weight: normal;
+  padding: 14px;
+  /*background: #FFFFFF;
+    border-color: #FFFFFF;*/
+  background: #000000;
+  border-color: #000000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  color: #FFFFFF;
+}
+.centered-page a {
+  color: #0c0c0c;
+}
+.centered-page .flex-item {
+  width: 100%;
+}
+.centered-page .main-logo-container {
+  float: none;
+  margin: 0 auto;
+  text-align: center;
+}
+.centered-page .form-group {
+  text-align: center;
+}
+.centered-page .form-group .form-input {
+  background: #FFFFFF;
+  border-color: transparent;
+  border-radius: 4px;
+  height: 48px;
+  line-height: 48px;
+}
+.centered-page .flex-item-5 {
+  background-color: tomato;
+  padding: 5px;
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+  line-height: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+}
+.centered-page .login-page label,
+.centered-page .forgot-password label {
+  display: none;
+}
+.centered-page p {
+  text-align: center;
+}
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local('Roboto'), local('Roboto-Regular'), url(https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Me5Q.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/roboto/v29/KFOmCnqEu92Fr1Me5Q.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: local('Roboto Medium'), local('Roboto-Medium'), url(https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmEU9vAw.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmEU9vAw.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: local('Roboto Bold'), local('Roboto-Bold'), url(https://fonts.gstatic.com/s/roboto/v20/KFOlCnqEu92Fr1MmWUlvAw.ttf) format('truetype');
+  src: url(https://fonts.gstatic.com/s/roboto/v29/KFOlCnqEu92Fr1MmWUlvAw.ttf) format('truetype');
 }
 body {
   font-family: 'Roboto', sans-serif;
