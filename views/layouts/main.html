@@ -18,6 +18,12 @@
   {% endfor %}
   {% endif %}
 
+  {% if clientThemeStylesheet %}
+  <link rel="stylesheet" type="text/css" href="/css/theme-{{clientThemeStylesheet}}.css">
+  {% endif %}
+
+
+
   {% if favicon %}
   <link rel="icon" href="{{ favicon }}">
   {% endif %}
@@ -26,6 +32,13 @@
   <style>{{inlineCSS}} </style>
   {% endif %}
 
+  {% if clientAccentColor %}
+  <style>
+    .centered-page .row-flex .btn-primary[type="submit"] {
+      background: {{clientAccentColor}};
+    }
+  </style>
+  {% endif %}
 
   <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
   <script type="text/javascript" src="/javascripts/jquery.validate.min.js"></script>
