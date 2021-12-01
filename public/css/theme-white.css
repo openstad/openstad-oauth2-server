@@ -1,0 +1,12 @@
+.centered-page {
+    background: #FFFFFF !important;
+}
+
+.centered-page h1 {
+    color: #000000 !important;
+}
+
+.centered-page .flex-container {
+    height: 100%;
+    background: #FFFFFF !important;
+}

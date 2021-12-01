@@ -1,8 +1,12 @@
-.centered-page .form-group .form-input {
-    background: #8c8c8c;
-    color: #FFFFFF;
+.centered-page {
+    background: #000000 !important;
 }
 
-.centered-page {
-    background: #000000;
+.centered-page h1 {
+    color: white !important;
+}
+
+.centered-page .flex-container {
+    height: 100%;
+    background: #000000 !important;
 }

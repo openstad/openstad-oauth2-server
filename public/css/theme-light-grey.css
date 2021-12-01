@@ -1,0 +1,11 @@
+.centered-page {
+    background: #efefef !important;
+}
+
+.centered-page h1 {
+    color: #000000 !important;
+}
+
+.centered-page .flex-container {
+    background: #efefef !important;
+}
