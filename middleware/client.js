@@ -46,8 +46,8 @@ exports.withOne = (req, res, next) => {
         res.locals.clientEmail = clientConfig.contactEmail;
         res.locals.clientDisclaimerUrl = clientConfig.clientDisclaimerUrl;
         res.locals.clientStylesheets = clientConfig.clientStylesheets;
-        res.locals.clientThemeStylesheet = clientConfig.clientThemeStylesheet;
-        res.locals.clientAccentColor = clientConfig.clientAccentColor;
+        res.locals.clientThemeStylesheet = clientConfigStyling.theme;
+        res.locals.clientAccentColor = clientConfigStyling.accentColor;
 
         //if logo isset in config overwrite the .env logo
         if (clientConfigStyling && clientConfigStyling.logo) {
