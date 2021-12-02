@@ -44,7 +44,7 @@ exports.withOne = (req, res, next) => {
         res.locals.clientEmail = clientConfig.contactEmail;
         res.locals.clientDisclaimerUrl = clientConfig.clientDisclaimerUrl;
         res.locals.clientStylesheets = clientConfig.clientStylesheets;
-        res.locals.clientThemeStylesheet = clientConfigStyling.theme;
+        res.locals.clientThemeStylesheet = clientConfigStyling.theme ? clientConfigStyling.theme : 'black';
         res.locals.clientAccentColor = clientConfigStyling.accentColor;
 
         res.locals.clientFooterHTML = clientConfigStyling.clientFooterHTML;

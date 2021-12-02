@@ -6756,6 +6756,9 @@ body,
 html {
   height: 100%;
 }
+body.centered-page {
+  max-width: none;
+}
 .centered-page h1 {
   font-size: 23px;
   text-align: center;
@@ -6774,7 +6777,7 @@ html {
   max-width: 320px;
   width: 100%;
   border-radius: 2px;
-  padding: 20px;
+  padding: 10px;
 }
 .centered-page .row-flex .btn-primary[type="submit"] {
   width: 100%;
@@ -6800,9 +6803,6 @@ html {
   float: none;
   margin: 0 auto;
   text-align: center;
-}
-.centered-page body {
-  max-width: none;
 }
 .centered-page .form-group {
   text-align: center;
