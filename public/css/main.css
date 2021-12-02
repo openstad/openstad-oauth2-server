@@ -6815,9 +6815,6 @@ html {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  /* Optional */
-  border: solid;
-  box-shadow: none;
 }
 .centered-page .flex-item-5 {
   background-color: tomato;
