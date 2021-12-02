@@ -50,6 +50,9 @@
       <div class="flex-item"> {% include 'elements/logo.html' %}</div>
       <div class="flex-item"> {% include 'elements/flash.html' %}</div>
       <div class="flex-item">{% block body %}{% endblock %}</div>
+      {% if clientFooterHTML %}
+        <div class="flex-item">{{clientFooterHTML | safe}}</div>
+      {% endif %}
       </div>
     </div>
   </div>

@@ -40,14 +40,15 @@ exports.withOne = (req, res, next) => {
         const clientConfig = req.client.config;
         const clientConfigStyling = clientConfig.styling ?  clientConfig.styling : {};
 
-
-
         res.locals.clientProjectUrl = clientConfig.projectUrl;
         res.locals.clientEmail = clientConfig.contactEmail;
         res.locals.clientDisclaimerUrl = clientConfig.clientDisclaimerUrl;
         res.locals.clientStylesheets = clientConfig.clientStylesheets;
         res.locals.clientThemeStylesheet = clientConfigStyling.theme;
         res.locals.clientAccentColor = clientConfigStyling.accentColor;
+
+        res.locals.clientFooterHTML = clientConfigStyling.clientFooterHTML;
+
 
         //if logo isset in config overwrite the .env logo
         if (clientConfigStyling && clientConfigStyling.logo) {
