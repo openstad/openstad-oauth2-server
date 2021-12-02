@@ -9,3 +9,7 @@
 .centered-page .flex-container {
     background: #18171c !important;
 }
+
+.centered-page a {
+    color: #8c8a9d !important;
+}
