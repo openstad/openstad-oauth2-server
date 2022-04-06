@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.40.0
+Update version number
+
 ## 0.19.0
 * Make the email url brute force more restrictive
 
