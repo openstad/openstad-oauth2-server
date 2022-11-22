@@ -116,7 +116,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(expressValidator());
 
-/*
 app.use((req, res, next) => {
   console.log('=====> REQUEST: ', req.originalUrl);
   console.log('=====> query: ', req.query);
@@ -124,7 +123,6 @@ app.use((req, res, next) => {
   console.log('=====> session: ', req.session);
   next();
 });
-*/
 
 // Passport configuration
 require('./auth');
