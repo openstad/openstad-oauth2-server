@@ -119,6 +119,7 @@ app.use(expressValidator());
 app.use((req, res, next) => {
   console.log('=====> REQUEST: ', req.originalUrl);
   console.log('=====> query: ', req.query);
+  console.log('=====> ip: ', req.headers['x-forwarded-for'] || req.socket.remoteAddress, req.ip);
   console.log('=====> body: ', req.body);
   console.log('=====> session: ', req.session);
   next();
