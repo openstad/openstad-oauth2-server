@@ -79,7 +79,7 @@
     "mock-knex": "^0.4.11",
     "jest": "^27.2.5",
     "request": "^2.48.x",
-    "sqlite3": "^5.0.4",
+    "sqlite3": "^5.1.5",
     "supertest": "^4.0.2"
   },
   "keywords": [
