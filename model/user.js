@@ -41,7 +41,7 @@ module.exports = (db, sequelize, Sequelize) => {
 
     extraData: {
       type: DataTypes.JSON,
-      defaultValue: '{}',
+      defaultValue: {},
       allowNull: false,
       get: function () {
         let value = this.getDataValue('extraData');
@@ -179,4 +179,3 @@ module.exports = (db, sequelize, Sequelize) => {
   return User;
 
 }
-
