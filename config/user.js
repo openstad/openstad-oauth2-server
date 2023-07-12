@@ -1,35 +1,35 @@
 exports.fields = [
   {
     key: 'firstName',
-    label: 'First name',
+    label: 'Voornaam',
   },
   {
     key: 'lastName',
-    label: 'Last name',
+    label: 'Achternaam',
   },
   {
     key: 'email',
-    label: 'Email address',
+    label: 'E-mail adres',
   },
   {
     key: 'phoneNumber',
-    label: 'Phone number',
+    label: 'Telefoonnummer',
   },
   {
     key: 'streetName',
-    label: 'Street name',
+    label: 'Straatnaam',
   },
   {
     key: 'houseNumber',
-    label: 'House number',
+    label: 'Huisnummer',
   },
   {
     key: 'city',
-    label: 'City',
+    label: 'Stad',
   },
   {
     key: 'suffix',
-    label: 'Suffix',
+    label: 'Achtervoegsel',
   },
   {
     key: 'postcode',
