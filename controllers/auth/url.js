@@ -39,15 +39,31 @@ exports.login = [setNoCachHeadersMw, (req, res) => {
 
 exports.confirmation = (req, res) => {
     const config = req.client.config ? req.client.config : {};
+    const emailSendConfiguration = config.authTypes.EmailSend;
     const configAuthType = config.authTypes && config.authTypes[authType] ? config.authTypes[authType] : {};
 
+    const title = emailSendConfiguration.title ? emailSendConfiguration.title : configAuthType && configAuthType.confirmedTitle ? configAuthType.confirmedTitle : false;
+
+    let template = emailSendConfiguration.template ? emailSendConfiguration.template : configAuthType && configAuthType.confirmedDescription ? configAuthType.confirmedDescription : false;
+
+    const loginUrl =  "/login";
+    const client = req.client;
+    const clientId =  req.query.clientId;
+    const clientEmail = client.config.contactEmail;
+    const redirectUrl = encodeURIComponent(req.query.redirect_uri);
+
+    template = template.replace("{{loginUrl}}", loginUrl);    
+    template = template.replace("{{redirectUrl}}", redirectUrl);
+    template = template.replace("{{clientId}}", clientId);
+    template = template.replace("{{clientEmail}}", clientEmail);
+
     res.render('auth/url/confirmation', {
-        clientId: req.query.clientId,
-        client: req.client,
-        loginUrl: '/login',
-        redirectUrl: encodeURIComponent(req.query.redirect_uri),
-        title: configAuthType && configAuthType.confirmedTitle ? configAuthType.confirmedTitle : false,
-        description: configAuthType && configAuthType.confirmedDescription ? configAuthType.confirmedDescription : false,
+        clientId: clientId,
+        client: client,
+        loginUrl: loginUrl,
+        redirectUrl: redirectUrl,
+        title: title,
+        description: template,
     });
 };
 
