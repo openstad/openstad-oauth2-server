@@ -1,5 +1,8 @@
 # Changelog
 
+## UNRELEASED
+* Add CIDR-based blocker to prevent e-mail filters (e.g. Cisco Umbrella) from invalidating a login link
+
 ## 1.0.0
 * Add env MYSQL_CA_CERT for MySQL SSL connection
 * Upgrade to node 16
