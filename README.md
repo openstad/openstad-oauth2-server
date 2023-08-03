@@ -128,3 +128,18 @@ By default the required fields have labels as defined in `config/user.js`. These
 
 ## MySQL with SSL
 When you want to connect to a MySQL server using SSL, a Certificate Authority certificate is required. The contents of this CA certificate can be passed into the `MYSQL_CA_CERT` environment variable.
+
+## Block CIDRs from invalidating the login e-mail link
+In some cases, e-mail filters (such as Cisco Umbrella) will invalidate the login e-mail link, because all links are visited by the filter.
+To combat this, the Cisco Umbrella CIDRs are blocked by default from visiting the `/auth/url/authenticate` route.
+
+If you need to add other CIDRs to this block, this can be done on a per client basis through the `clients` table under the `config` column:
+
+```
+"blockCidrs": [
+    "1.2.3.4/16",
+    "4.4.4.4/16"
+]
+```
+
+Note: When adding your own `blockCidrs` like this, the default Cisco umbrella CIDRs will be overwritten.
