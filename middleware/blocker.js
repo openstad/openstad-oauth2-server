@@ -7,12 +7,12 @@ exports.preventCiscoRequest = (req, res, next) => {
     return next();
   }
   
-  // CIDRs for Cisco Umbrella
+  // Get CIDRs from client config. If the `blockCidrs` key doesn't exist fall back to Cisco Umbrella CIDRs
   // See https://support.umbrella.com/hc/en-us/articles/360059292052-Additional-Egress-IP-Address-Range
-  const cidrs = ['146.112.0.0/16', '155.190.0.0/16', '151.186.0.0/16'];
+  const blockCidrs = req && req.client && req.client.config && req.client.config.blockCidrs ? req.client.config.blockCidrs : ['146.112.0.0/16', '155.190.0.0/16', '151.186.0.0/16'];
   
   // Check if IP is in cidr
-  const isIpInCidr = cidrs.some(cidr => {
+  const isIpInCidr = blockCidrs.some(cidr => {
     const block = new Netmask(cidr);
     return block.contains(req.ip);
   });
@@ -21,7 +21,7 @@ exports.preventCiscoRequest = (req, res, next) => {
     return next();
   }
   
-  console.log('IP is in CIDRs to block', req.ip, cidrs, isIpInCidr);
+  console.log('IP is in CIDRs to block', req.ip, blockCidrs, isIpInCidr);
   
   req.flash('error', {msg: 'De url is geen geldige login url, wellicht is deze verlopen'});
   return res.redirect(`/auth/url/login?clientId=${req.query.clientId}`);
