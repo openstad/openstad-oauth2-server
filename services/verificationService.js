@@ -20,7 +20,7 @@ exports.sendVerification = async (user, client, redirectUrl, adminLoginRequest) 
   const authTypeConfig = clientConfig.authTypes && clientConfig.authTypes.Url ? clientConfig.authTypes.Url : {};
   const emailTemplateString = authTypeConfig.emailTemplate ? authTypeConfig.emailTemplate : false;
   const emailSubject = authTypeConfig.emailSubject ? authTypeConfig.emailSubject : 'Inloggen bij ' + client.name;
-  const emailHeaderImage = authTypeConfig.emailHeaderImage ? authTypeConfig.emailHeaderImage : false;
+  const emailHeaderImage = clientConfig.emailHeaderImage ? clientConfig.emailHeaderImage : false;
   const transporterConfig = clientConfig.smtpTransport ? clientConfig.smtpTransport : {};
 
   let emailLogo;
