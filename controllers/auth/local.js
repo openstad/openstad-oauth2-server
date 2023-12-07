@@ -132,7 +132,7 @@ exports.logout = async (req, res) => {
     const redirectUrlHost = redirectURL ? new URL(redirectURL).hostname : false;
     redirectURL           = redirectUrlHost && allowedDomains && allowedDomains.indexOf(redirectUrlHost) !== -1 ? redirectURL : false;
   } catch (e) {
-    //
+    redirectURL = null;
   }
 
   if (!redirectURL) {
